@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE Ontology [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.example.com/actiontest.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     ontologyIRI="http://www.example.com/actiontest.owl">
+    <Prefix name="" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Bucket"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Capability"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Carry"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CarryBucket"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CarryManapotion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Entity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Ghost"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ManaPotion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Move"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MoveItself"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MoveManapotion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Restriction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SelfRef"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SpecialGhost"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SpecialManaPotion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#User"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasParameter"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#supports"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#ghost1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#ghost2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#manapotion1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#user1"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Bucket"/>
+        <Class IRI="#Entity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Carry"/>
+        <Class IRI="#Capability"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CarryBucket"/>
+        <Class IRI="#Carry"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CarryBucket"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasParameter"/>
+            <Class IRI="#Bucket"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CarryManapotion"/>
+        <Class IRI="#Carry"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CarryManapotion"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasParameter"/>
+            <Class IRI="#ManaPotion"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ghost"/>
+        <Class IRI="#Entity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ghost"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#supports"/>
+            <Class IRI="#CarryBucket"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ghost"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#supports"/>
+            <Class IRI="#CarryManapotion"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ghost"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#supports"/>
+            <Class IRI="#MoveItself"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Ghost"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#supports"/>
+            <Class IRI="#MoveManapotion"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ManaPotion"/>
+        <Class IRI="#Entity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Move"/>
+        <Class IRI="#Capability"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MoveItself"/>
+        <Class IRI="#Move"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MoveItself"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasParameter"/>
+            <Class IRI="#SelfRef"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MoveManapotion"/>
+        <Class IRI="#Move"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MoveManapotion"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasParameter"/>
+            <Class IRI="#ManaPotion"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SelfRef"/>
+        <Class IRI="#Entity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SpecialGhost"/>
+        <Class IRI="#Ghost"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SpecialManaPotion"/>
+        <Class IRI="#ManaPotion"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#User"/>
+        <Class IRI="#Entity"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#SpecialGhost"/>
+        <NamedIndividual IRI="#ghost1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Ghost"/>
+        <NamedIndividual IRI="#ghost2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ManaPotion"/>
+        <NamedIndividual IRI="#manapotion1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#User"/>
+        <NamedIndividual IRI="#user1"/>
+    </ClassAssertion>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hasParameter"/>
+        <Class IRI="#Capability"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#supports"/>
+        <Class IRI="#Entity"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hasParameter"/>
+        <Class IRI="#Entity"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#supports"/>
+        <Class IRI="#Capability"/>
+    </ObjectPropertyRange>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

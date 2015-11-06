@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<SimxConfig>
+	<ScalaHome>
+		<Path>../../../lib/scala/scala-2.11.0</Path>
+	</ScalaHome>
+	<Components>
+		<Component> 
+			<Path>../../../components/renderer/jvr</Path>
+		</Component> 
+		<Component> 
+			<Path>../../../components/sound/lwjgl-sound</Path>
+		</Component> 
+		<Component> 
+			<Path>../../../components/io/vrpn</Path>
+		</Component> 
+		<Component> 
+			<Path>../../../components/io/leapmotion</Path>
+		</Component> 
+	</Components>
+</SimxConfig>

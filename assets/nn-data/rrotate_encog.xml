@@ -1,0 +1,8 @@
+<ENCOG_CONFIG>
+  <!-- Possible propagations are: BackPropagation, ResilientPropagation -->
+  <PROPAGATION>ResilientPropagation</PROPAGATION>
+  <TRAIN_ERROR>1.0E-4</TRAIN_ERROR>
+  <!-- Possible train strategies are: Greedy, HybridStrategy, ResetStrategy, RequiredImprovementStrategy, StopTrainingStrategy -->
+  <TRAIN_STRATEGY>StopTrainingStrategy</TRAIN_STRATEGY>
+  <CYCLES>100</CYCLES>
+</ENCOG_CONFIG>
