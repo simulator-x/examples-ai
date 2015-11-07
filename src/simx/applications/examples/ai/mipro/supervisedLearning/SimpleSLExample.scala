@@ -101,10 +101,10 @@ with EventProvider
     )
   }
 
-  val RightHand      = types.EntityType(Symbols.hand) and types.Chirality(chirality.Right)
-  val RightElbow     = types.EntityType(Symbols.elbow) and types.Chirality(chirality.Right)
-  val RightShoulder  = types.EntityType(Symbols.shoulder) and types.Chirality(chirality.Right)
-  val Spine          = types.EntityType(Symbols.spine)
+  val RightHand      = Entity withProperties types.EntityType(Symbols.hand) and types.Chirality(chirality.Right)
+  val RightElbow     = Entity withProperties types.EntityType(Symbols.elbow) and types.Chirality(chirality.Right)
+  val RightShoulder  = Entity withProperties types.EntityType(Symbols.shoulder) and types.Chirality(chirality.Right)
+  val Spine          = Entity withProperty   types.EntityType(Symbols.spine)
 
   val RightHandRelative =
     types.EntityType.withAnnotations(Symbols.relative)(Symbols.hand) and types.Chirality(chirality.Right)
