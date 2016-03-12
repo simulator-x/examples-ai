@@ -29,9 +29,10 @@ import ImplicitConversions._
 import Functions._
 
 /**
- * Created by chris on 15/09/15.
+ * Created by martin 
+ * on 06/07/15.
  */
-class ExtendedSubAtn extends AugmentedTransitionNetwork {
+class MMIAtn extends AugmentedTransitionNetwork {
   override val cursorMerge: Boolean = true
   override val outputTypes: List[EventDescription] = Commands.createSphere :: Nil
   override val inputTypes: List[EventDescription] = SpeechEvents.token :: Nil
@@ -43,55 +44,40 @@ class ExtendedSubAtn extends AugmentedTransitionNetwork {
       printInfo
     )
 
+
   //Topology
-  create StartState 'start    withArc 'create toTargetState 'awaitingNoun
-  create State      'awaitingNoun  withSubArc 'nn   toTargetState 'foundNN
-  create State      'nn withSubArc 'detAdj toTargetState 'det
-  create State      'detAdj withEpsilonArc 'true toTargetState 'isTrue2
-  create State      'isTrue2 withEpsilonArc 'true toTargetState 'isTrue3
-  create State      'isTrue3 withArc 'a toTargetState 'hasDet
-  create State      'hasDet withArc 'adj toTargetState 'hasAdj
-  create EndState   'hasAdj
-  create State      'det withArc 'sphere toTargetState 'noun
-  create EndState   'noun
-  // an epsilon arc is triggered without new input
-  create State      'foundNN withEpsilonArc 'executeCommand toTargetState 'end
+  create StartState 'start        withArc 'verb toTargetState 'awaitingDet
+  create State      'awaitingDet  withArc 'det      toTargetState 'awaitingNoun
+  create State      'awaitingNoun withArc 'noun toTargetState 'end
   create State      'end
 
-  create Arc 'create withCondition  checkToken("create") addFunctions copyAndPrint
-  create Arc 'adj withCondition     checkToken("blue") addFunctions copyAndPrint
-  create Arc 'a withCondition       checkToken("a") addFunctions copyAndPrint
-  create Arc 'sphere withCondition  checkToken("sphere") addFunctions copyAndPrint
-  create EpsilonArc 'executeCommand withCondition commandComplete addFunction complete
-  create EpsilonArc 'true withCondition isTrue addFunctions copyAndPrint
+  create Arc 'verb withCondition  checkToken("create") addFunction addAndCopyRegister
+  create Arc 'det withCondition   checkToken("a") addFunction addAndCopyRegister
+  create Arc 'noun withCondition  checkToken("ball") addFunction (addAndCopyRegister, complete)
+
 
   def checkToken(validTokens: String*)(in: Event): Condition.Result = {
     in.name match {
       case SpeechEvents.token.name =>
-        val isValid = validTokens.contains(in.get(types.String).get.toLowerCase)
+        val token = in.get(types.String).get
+        var isValid = validTokens.contains(token.toLowerCase)
+        if(token != "a"){
+          isValid = isValid && in.get(types.Real).get > 0.3
+        }
         ConditionResult(isValid)
       case _ => ConditionResult(doTransition = false)
     }
   }
 
-  def commandComplete(in: Event, curReg: StateRep, prevReg: StateRep): Condition.Result = {
-    val speechInputs = prevReg.register.getAllValuesFor(types.String)
-    val result = speechInputs.contains("create") && speechInputs.contains("a") && speechInputs.contains("sphere")
-    println("Command Complete: " + result)
-    ConditionResult(doTransition = result)
-  }
-
-  def isTrue(in: Event, curReg: StateRep, prevReg: StateRep): Condition.Result = {
-    ConditionResult(doTransition = true)
-  }
-
-  def doTrue() ={
-    Nil
-  }
-
-  def complete() = {
+  def complete(in: Event, curReg: StateRep, prevReg: StateRep) = {
     println("Command completed successfully")
     Events.reset(types.Identifier(SimpleAtnExample.atnName)) :: Commands.createSphere() :: Nil
   }
 
+  def addAndCopyRegister(in: Event, triggeredArc: ArcRep, curReg: StateRep, prevReg: StateRep, atn: ATNMachine) = {
+    copyRegister(in, triggeredArc, curReg, prevReg, atn)
+    copyEventDataToRegister(types.String)(in, triggeredArc, curReg, prevReg, atn)
+    println("Current Register at " + curReg.id + " containing " + curReg.register)
+    Nil
+  }
 }

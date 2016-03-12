@@ -65,27 +65,26 @@ class EntityRecordingExample() extends SimXApplication with JVRInit  {
     LeapMotionComponentAspect(leapName) iff !useKinect and
     EditorComponentAspect(editorName, appName = "MasterControlProgram") and
     KinectComponentAspect(j4kName) iff recordVideo
-  
-  protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {
-    entityRecorder = Some(SVarActor.createActor(new EntityRecorder()))
-  }
 
   var entityRecorder: Option[SVarActor.Ref] = None
+
+  protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {
+    entityRecorder = Some(SVarActor.createActor(new EntityRecorder(defaultFolder = recordingsFolder)))
+  }
 
   def bodyParts =
     if(fullUpperBody) KinectFAASTSkeleton_1_2.upperBody else KinectFAASTSkeleton_1_2.simpleUpperBody
 
   protected def createEntities(): Unit = {
     if(useKinect) {
-      if(fullUpperBody) KinectFAASTSkeleton_1_2.upperBodyUserDescription("Tracker0@" + Servers.localhost).realize()
-      else KinectFAASTSkeleton_1_2.simpleUpperBodyUserDescription("Tracker0@" + Servers.localhost).realize()
+      if(fullUpperBody) KinectFAASTSkeleton_1_2.upperBodyUserDescription("Tracker0@" + Servers.workstation).realize()
+      else KinectFAASTSkeleton_1_2.simpleUpperBodyUserDescription("Tracker0@" + Servers.workstation).realize()
     }
     if(recordVideo) KinectVideoFrameEntityDescription().realize(addToRecordingSet)
   }
 
   protected def finishConfiguration() {
     if(useKinect) requestKinectEntitiesToRecord() else requestLeapEntitiesToRecord()
-    initializeStartStopEntity()
   }
 
   private def requestKinectEntitiesToRecord(): Unit = {
@@ -108,19 +107,5 @@ class EntityRecordingExample() extends SimXApplication with JVRInit  {
     entityRecorder.foreach{recorder => recorder ! Record(e)}
   }
 
-  private def initializeStartStopEntity() {
-    new EntityDescription('Recorder, types.EntityType(Symbols.record)).realize{ e =>
-      e.set(types.Boolean(false))
-      e.observe(types.Boolean){ newValue =>
-        if(newValue)
-          entityRecorder.collect { case recorder => recorder ! StartEntityRecording(recordingsFolder) }
-        else
-          entityRecorder.collect { case recorder => recorder ! StopEntityRecording() }
-      }
-    }
-  }
-
   protected def removeFromLocalRep(e : Entity){}
 }
-
-

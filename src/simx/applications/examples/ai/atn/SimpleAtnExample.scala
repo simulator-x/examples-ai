@@ -73,10 +73,6 @@ class SimpleAtnExample extends SimXApplication with EventHandler with EventProvi
     initLight()
 
 
-    var x = List("1")
-    x ::= "2"
-    x ::= "3"
-    println(x)
 
 
 
@@ -102,13 +98,16 @@ class SimpleAtnExample extends SimXApplication with EventHandler with EventProvi
   private def initKeyboard(): Unit = {
     onOneEntityAppearance(SValEquals(types.EntityType(Symbols.keyboard))) { keyboardEntity =>
       keyboardEntity.observe(types.Key_1){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(1L))
       }
       keyboardEntity.observe(types.Key_2){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(2L))
       }
       keyboardEntity.observe(types.Key_3){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("dog"), types.Time(3L))
+      }
+      keyboardEntity.observe(types.Key_4){ pressed =>
+        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(4L))
       }
     }
   }

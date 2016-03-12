@@ -20,7 +20,10 @@
 
 package simx.applications.examples.ai.misc
 
+import java.io.{File, PrintWriter}
+
 import akka.actor._
+import simx.core.helper.IO
 import simx.core.svaractor.SVarActor
 
 import scala.concurrent.duration._
@@ -35,7 +38,7 @@ object ActorTest {
 
 case class DoIt()
 
-class ListTestSVarActor extends SVarActor {
+class ListTestSVarActor(targetedDeltaInMSec: Long = 5L) extends SVarActor {
   var last = 0L
   var deltas = List[Long]()
 
@@ -43,18 +46,27 @@ class ListTestSVarActor extends SVarActor {
    * called when the actor is started
    */
   override protected def startUp(): Unit = {
-    addJobIn(1L){doStuff()}
+    addJobIn(targetedDeltaInMSec){doStuff()}
   }
 
   def doStuff(): Unit = {
     val now = System.currentTimeMillis()
     deltas ::= now - last
     last = now
-    if(deltas.size == 100) {
-      println(deltas)
+    if(deltas.size == 10000) {
+      deltas = deltas .dropRight(200)
+      val diffs = deltas.map{d => d.toFloat - targetedDeltaInMSec.toFloat}
+      val logFile = IO.dateTimeFileFrom(new File("simx-actor-test.csv"), append = false)
+      new PrintWriter(logFile) {
+        write(diffs.mkString("\n").replace('.',','))
+        close()
+      }
+      println("Saved log to " + logFile.getAbsolutePath)
+//      println("Mean: " + (diffs.sum / diffs.size.toFloat))
+//      println("Max : " + diffs.max)
       deltas = Nil
     }
-    addJobIn(1L){doStuff()}
+    addJobIn(targetedDeltaInMSec){doStuff()}
   }
 }
 

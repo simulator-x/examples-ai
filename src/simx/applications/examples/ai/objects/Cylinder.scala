@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 The SIRIS Project
+ * Copyright 2016 The SIRIS Project
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,14 +18,24 @@
  * Federal Ministry of Education and Research (grant no. 17N4409).
  */
 
-package simx.applications.examples.ai
+package simx.applications.examples.ai.objects
+
+import simplex3d.math.float._
+import simx.core.components.renderer.createparameter.ShapeFromFile
+import simx.core.entity.description.SValSet
+import simx.core.ontology.EntityDescription
 
 /**
  * Created by martin 
- * on 18/06/15.
+ * on 21/08/15.
  */
-object Servers {
-  val localhost = "localhost"
-  val fishTank = "132.187.8.182"
-  val workstation = "132.187.8.212"
-}
+case class Cylinder(pos: ConstVec3, name: String = "Cylinder", additionalProperties: SValSet = SValSet()) extends
+  EntityDescription(
+    aspects = ShapeFromFile(
+      file = "assets/vis/blue-1x0.05x0.05-positiveZAxis-cylinder.dae",
+      transformation = Right(ConstMat4(Mat4x3.translate(pos))),
+      scale = ConstMat4(Mat4x3.scale(Vec3(0.25f,0.25f,3)))
+    ) :: Nil,
+    name = Symbol(name),
+    additionalProperties = additionalProperties
+  )

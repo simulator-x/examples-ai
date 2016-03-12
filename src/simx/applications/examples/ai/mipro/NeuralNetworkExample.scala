@@ -26,7 +26,7 @@ import simx.applications.examples.ai.stubs.Utils.{constVec3fsValToList, toList}
 import simx.applications.examples.ai.stubs.{NeuralNetworkStub, Utils}
 import simx.components.ai.feature.recording.Events._
 import simx.components.ai.feature.recording.storage.Persistence
-import simx.components.ai.feature.recording.{EntityPlayer, StartFastForwardPlayback}
+import simx.components.ai.feature.recording.{EntityPlayer, FastForwardPlayback}
 import simx.components.ai.feature.sl_chris.AnnotationReader
 import simx.components.ai.mipro.implementations.{AccelerationProcessor, VelocityProcessor}
 import simx.components.ai.mipro.supervisedlearning.NeuralNetworkProcessor
@@ -75,7 +75,7 @@ class NeuralNetworkExample extends SimXApplication with JVRInit {
   val playbackData            = playbackDataFile.map(Persistence.load(_))
   val playbackAnnotationFile  = playbackDataFile.map(IO.changeExtension("csv"))
   val annotationOption        = playbackData.map{ data =>
-    new AnnotationReader(playbackAnnotationFile.get, data.recordingStart.get)}
+    new AnnotationReader(playbackAnnotationFile.get, data.metaData)}
   //Just for convenience
   def annotation              = annotationOption.get
 
@@ -167,7 +167,7 @@ class NeuralNetworkExample extends SimXApplication with JVRInit {
     //Start playback in 5 sec
     addJobIn(delay) {
       entityPlayer.foreach { player =>
-        player ! StartFastForwardPlayback(forerunInMillis = 5000L, coolDownInMillis = 3000L, speedUp = 5L)
+        player ! FastForwardPlayback(forerunInMillis = 5000L, coolDownInMillis = 3000L, speedUp = 5L)
       }
     }
   }

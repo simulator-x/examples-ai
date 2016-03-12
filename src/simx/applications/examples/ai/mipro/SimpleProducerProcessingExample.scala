@@ -47,7 +47,7 @@ class SimpleProducerProcessingExample extends SimXApplication with JVRInit {
   protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {}
 
   //Some definitions
-  val RightHand = Entity withProperties types.EntityType(Symbols.hand) and types.Chirality(chirality.Right)
+  val RightHand = types.EntityType(Symbols.hand) and types.Chirality(chirality.Right)
 
   protected def createEntities(): Unit = {}
 

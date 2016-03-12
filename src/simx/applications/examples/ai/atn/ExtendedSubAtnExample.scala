@@ -36,6 +36,7 @@ import simx.core.{ApplicationConfig, SimXApplicationMain, SimXApplication}
 import simx.core.worldinterface.eventhandling.{EventDescription, EventHandler, EventProvider}
 import simx.core.components.renderer.createparameter.convert._
 
+import scala.collection.mutable
 import scala.util.Random
 
 /**
@@ -91,16 +92,16 @@ class ExtendedSubAtnExample extends SimXApplication with EventHandler with Event
   private def initKeyboard(): Unit = {
     onOneEntityAppearance(SValEquals(types.EntityType(Symbols.keyboard))) { keyboardEntity =>
       keyboardEntity.observe(types.Key_1){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(1L))
       }
       keyboardEntity.observe(types.Key_2){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(2L))
       }
       keyboardEntity.observe(types.Key_3){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("blue"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("blue"), types.Time(3L))
       }
       keyboardEntity.observe(types.Key_4){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(4L))
       }
     }
   }

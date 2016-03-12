@@ -40,9 +40,7 @@ import simx.core.entity.Entity
 /**
  * @author Martin Fischbach
  */
-object FeatureTest extends SimXApplicationMain( new FeatureTest ){
-  override def main(args: Array[String]): Unit = super.main(args)
-}
+object FeatureTest extends SimXApplicationMain( new FeatureTest )
 
 class FeatureTest extends SimXApplication with EventHandler with EventProvider
 with ExamplesAIATN with ExamplesAIFeatures {

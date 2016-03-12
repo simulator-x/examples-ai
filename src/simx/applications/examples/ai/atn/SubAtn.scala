@@ -47,7 +47,8 @@ class SubAtn extends AugmentedTransitionNetwork {
   //Topology
   create StartState 'start        withArc 'create toTargetState 'awaitingNoun
   create State      'awaitingNoun  withSubArc 'nn   toTargetState 'foundNN
-  create State      'nn withArc 'a toTargetState 'det
+  create State      'nn withEpsilonArc 'true toTargetState 's1
+  create State       's1 withArc 'a toTargetState 'det
   create State      'det withArc 'sphere toTargetState 'noun
   create EndState   'noun
   // an epsilon arc is triggered without new input
@@ -58,6 +59,11 @@ class SubAtn extends AugmentedTransitionNetwork {
   create Arc 'a withCondition       checkToken("a") addFunctions copyAndPrint
   create Arc 'sphere withCondition  checkToken("sphere") addFunctions copyAndPrint
   create EpsilonArc 'executeCommand withCondition commandComplete addFunction complete
+  create EpsilonArc 'true withCondition isTrue addFunctions copyAndPrint
+
+  def isTrue(in: Event, curReg: StateRep, prevReg: StateRep): Condition.Result = {
+    ConditionResult(doTransition = true)
+  }
 
   def checkToken(validTokens: String*)(in: Event): Condition.Result = {
     in.name match {

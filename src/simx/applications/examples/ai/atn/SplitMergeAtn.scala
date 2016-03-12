@@ -36,7 +36,7 @@ class SplitMergeAtn extends AugmentedTransitionNetwork   {
   val outputTypes = ExampleEvents.command :: Nil
 
   create StartState 'start withArc 'remove toTargetState 'split
-  create Split      'split withCondition maxTimeDelta(5000) andArc 'gesture toTargetState 'merge andArc 'speech toTargetState 'merge
+  create Split      'split withCondition maxTimeDelta(1) andArc 'gesture toTargetState 'merge andArc 'speech toTargetState 'merge
   create Merge      'merge withOnMergeFunction onMerge withArc 'test toTargetState 'end
   create EndState   'end
 

@@ -89,13 +89,13 @@ class SubAtnExample extends SimXApplication with EventHandler with EventProvider
   private def initKeyboard(): Unit = {
     onOneEntityAppearance(SValEquals(types.EntityType(Symbols.keyboard))) { keyboardEntity =>
       keyboardEntity.observe(types.Key_1){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(1L))
       }
       keyboardEntity.observe(types.Key_2){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(2L))
       }
       keyboardEntity.observe(types.Key_3){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(System.currentTimeMillis()))
+        if(pressed) SpeechEvents.token.emit(types.String("sphere"), types.Time(3L))
       }
     }
   }

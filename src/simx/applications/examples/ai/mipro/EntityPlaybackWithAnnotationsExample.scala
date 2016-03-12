@@ -29,12 +29,12 @@ package simx.applications.examples.ai.mipro
 import simx.components.ai.feature.recording.Events._
 import simx.components.ai.feature.recording._
 import simx.components.ai.feature.recording.storage.Persistence
-import simx.components.ai.feature.sl_chris.AnnotationReader
+import simx.components.ai.feature.sl_chris.{AnnotationSource, AnnotationReader}
 import simx.components.ai.mipro.{EntityCreationDSL, EventDSL, Processor, Start}
 import simx.components.editor.EditorComponentAspect
 import simx.components.renderer.jvr.JVRInit
 import simx.core.entity.Entity
-import simx.core.helper.{IO, chirality}
+import simx.core.helper.{Jfx, IO, chirality}
 import simx.core.ontology._
 import simx.core.svaractor.SVarActor
 import simx.core.{ApplicationConfig, SimXApplication, SimXApplicationMain}
@@ -45,11 +45,17 @@ object EntityPlaybackWithAnnotationsExample extends SimXApplicationMain[EntityPl
 
 class EntityPlaybackWithAnnotationsExample() extends SimXApplication with JVRInit  {
 
-  val playbackDataFile        = IO.askForFile("Choose playback file", IO.extensionFilter("bin")).get
+  val playbackDataFile        = Jfx.askForFile("Choose playback file", Some("xml")).get
   val playbackData            = Persistence.load(playbackDataFile)
   val playbackAnnotationFile  = IO.changeExtension(playbackDataFile, "csv")
-  val annotation              = new AnnotationReader(playbackAnnotationFile, playbackData.recordingStart.get)
-  
+  val annotation              = new AnnotationReader(playbackAnnotationFile, playbackData.metaData)
+
+//  val playbackDataFolder        = Jfx.askForFolder("Choose playback files folder").get
+//  val playbackDataFiles         = playbackDataFolder.listFiles().filter(_.getAbsolutePath.endsWith(".xml"))
+//  val playbackData              = Persistence.load(playbackDataFiles)
+//  val playbackAnnotationSources = playbackData.metaData.map(AnnotationSource.from(_))
+//  val annotation                = new AnnotationReader(playbackAnnotationSources)
+
   var entityPlayer: Option[SVarActor.Ref] = None
 
   override protected def applicationConfiguration = ApplicationConfig withComponent
@@ -61,25 +67,29 @@ class EntityPlaybackWithAnnotationsExample() extends SimXApplication with JVRIni
 
   protected def createEntities(): Unit = {}
 
+  val RightHand      = types.EntityType(Symbols.hand)     and types.Chirality(chirality.Right)
+  val LeftHand       = types.EntityType(Symbols.hand)     and types.Chirality(chirality.Left)
+  val Spine          = types.EntityType(Symbols.spine)
+  val User           = types.EntityType(Symbols.user)
+
   protected def finishConfiguration() {
 
     Start a new Processor with EntityCreationDSL with EventDSL {
       
-      Requires property types.Transformation from entity describedBy (types.EntityType(Symbols.hand) and types.Chirality(chirality.Left))
-      Requires property types.Transformation from entity describedBy (types.EntityType(Symbols.hand) and types.Chirality(chirality.Right))
-      Requires property types.Transformation from entity describedBy types.EntityType(Symbols.spine)
+      Requires property types.Transformation from LeftHand
+      Requires property types.Transformation from RightHand
+      Requires property types.Transformation from Spine
 
-      Creates entity `with` property types.EntityType(Symbols.gesture) named 'Rotation
+      Creates entity `with` property User named 'User
 
-      Updates the properties of entity describedBy types.EntityType(Symbols.gesture) `with` {
-        types.Boolean(annotation("rotate").isPresent)
+      Updates the properties of User `with` {
+        if(annotation("rotate").isPresent)
+          types.Gesture(Symbols.rotate)
+        else
+          types.Gesture(Symbols.idle)
       }
 
       Reacts to event describedBy playbackFinished by { println("Playback finished.") }
-    }
-
-    addJobIn(5000L){
-      entityPlayer.foreach(_ ! StartPlayback())
     }
   }
 

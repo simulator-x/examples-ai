@@ -137,10 +137,6 @@
         <Class IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#Concept"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Gesture"/>
-        <Class IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#Concept"/>
-    </SubClassOf>
-    <SubClassOf>
         <Class IRI="#Minuend"/>
         <Class IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/BasicTypes.owl#Math"/>
     </SubClassOf>
@@ -244,13 +240,6 @@
             <Class IRI="#Distances"/>
         </ObjectSomeValuesFrom>
         <NamedIndividual IRI="#SimxAiExamples_DistancesDescription"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/BasicDescriptions.owl#describesProperty"/>
-            <Class IRI="#Gesture"/>
-        </ObjectSomeValuesFrom>
-        <NamedIndividual IRI="#SimxAiExamples_GestureDescription"/>
     </ClassAssertion>
     <ClassAssertion>
         <ObjectSomeValuesFrom>
@@ -416,16 +405,6 @@
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#basedOn"/>
-        <NamedIndividual IRI="#SimxAiExamples_GestureDescription"/>
-        <NamedIndividual IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/BasicDescriptions.owl#SimxCoreComponent_EntityTypeDescription"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#forComponent"/>
-        <NamedIndividual IRI="#SimxAiExamples_GestureDescription"/>
-        <NamedIndividual IRI="#SimxComponent_AiExamples"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#basedOn"/>
         <NamedIndividual IRI="#SimxAiExamples_NormalsDescription"/>
         <NamedIndividual IRI="#SimxAiExamples_VelocitiesDescription"/>
     </ObjectPropertyAssertion>
@@ -493,19 +472,6 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">1</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p1</Literal>
-        </Annotation>
-        <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
-        <NamedIndividual IRI="#SimxFunction_BooleanOfPositionAndEntity"/>
-        <NamedIndividual IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/BasicDescriptions.owl#SirisCore_PositionDescription"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <Annotation>
-            <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
             <Literal datatypeIRI="&xsd;integer">2</Literal>
         </Annotation>
         <Annotation>
@@ -515,6 +481,19 @@
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_BooleanOfPositionAndEntity"/>
         <NamedIndividual IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/SimxCoreOntology.owl#SirisCore_EntityDescription"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <Annotation>
+            <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
+            <Literal datatypeIRI="&xsd;integer">1</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
+            <Literal datatypeIRI="&xsd;string">p1</Literal>
+        </Annotation>
+        <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
+        <NamedIndividual IRI="#SimxFunction_BooleanOfPositionAndEntity"/>
+        <NamedIndividual IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/BasicDescriptions.owl#SirisCore_PositionDescription"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasReturnValue"/>
@@ -529,11 +508,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">2</Literal>
+            <Literal datatypeIRI="&xsd;integer">1</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p2</Literal>
+            <Literal datatypeIRI="&xsd;string">p1</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_DistanceBetweenPositionAndPosition"/>
@@ -542,11 +521,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">1</Literal>
+            <Literal datatypeIRI="&xsd;integer">2</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p1</Literal>
+            <Literal datatypeIRI="&xsd;string">p2</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_DistanceBetweenPositionAndPosition"/>
@@ -565,11 +544,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">2</Literal>
+            <Literal datatypeIRI="&xsd;integer">1</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p2</Literal>
+            <Literal datatypeIRI="&xsd;string">p1</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_DistanceGreaterThanDistanceAsBoolean"/>
@@ -578,11 +557,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">1</Literal>
+            <Literal datatypeIRI="&xsd;integer">2</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p1</Literal>
+            <Literal datatypeIRI="&xsd;string">p2</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_DistanceGreaterThanDistanceAsBoolean"/>
@@ -801,11 +780,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">1</Literal>
+            <Literal datatypeIRI="&xsd;integer">2</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p1</Literal>
+            <Literal datatypeIRI="&xsd;string">p2</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_TimeApproximatesTimeAsBoolean"/>
@@ -814,11 +793,11 @@
     <ObjectPropertyAssertion>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameterPosition"/>
-            <Literal datatypeIRI="&xsd;integer">2</Literal>
+            <Literal datatypeIRI="&xsd;integer">1</Literal>
         </Annotation>
         <Annotation>
             <AnnotationProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasRole"/>
-            <Literal datatypeIRI="&xsd;string">p2</Literal>
+            <Literal datatypeIRI="&xsd;string">p1</Literal>
         </Annotation>
         <ObjectProperty IRI="http://www.hci.uni-wuerzburg.de/ontologies/simx/concepts/Actions.owl#hasParameter"/>
         <NamedIndividual IRI="#SimxFunction_TimeApproximatesTimeAsBoolean"/>
@@ -1089,5 +1068,5 @@
 
 
 
-<!-- Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.5.0) http://owlapi.sourceforge.net -->
 

@@ -20,7 +20,7 @@
 package simx.applications.examples.ai.mipro
 
 import simx.components.ai.feature.recording._
-import simx.components.ai.feature.recording.storage.Persistence
+import simx.components.ai.feature.recording.storage.{PersistenceOptimized, Persistence}
 import simx.components.editor.EditorComponentAspect
 import simx.components.renderer.jvr.JVRInit
 import simx.core.entity.Entity
@@ -50,23 +50,12 @@ class EntityPlaybackExample() extends SimXApplication with JVRInit  {
     EditorComponentAspect('editor, appName = "MasterControlProgram")
 
   protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {
-    entityPlayer = Some(SVarActor.createActor(new EntityPlayer(playbackData)))
+    entityPlayer = Some(SVarActor.createActor(new EntityPlayer(playbackData, playbackMode = RealTimePlayback())))
   }
 
   protected def createEntities(): Unit = {}
 
-  protected def finishConfiguration() {
-    initializeStartStopEntity()
-  }
-
-  private def initializeStartStopEntity() {
-    new EntityDescription('Player, types.EntityType(Symbols.record)).realize{ e =>
-      e.set(types.Boolean(false))
-      e.observe(types.Boolean){ newValue =>
-        if(newValue) entityPlayer.foreach{ _ ! StartPlayback() }
-      }
-    }
-  }
+  protected def finishConfiguration() {}
 
   protected def removeFromLocalRep(e : Entity){}
 }

@@ -30,6 +30,7 @@ import simx.components.vrpn.avatar.KinectFAASTSkeleton_1_2
 import simx.core.component.{ExecutionStrategy, Soft}
 import simx.core.components.renderer.setup.BasicDisplayConfiguration
 import simx.core.entity.Entity
+import simx.core.entity.description.SValSet
 import simx.core.helper.chirality
 import simx.core.ontology._
 import simx.core.svaractor.SVarActor
@@ -44,25 +45,23 @@ import scala.collection.immutable
 object SimpleKinectProcessingExample extends SimXApplicationMain[SimpleKinectProcessingExample]
 
 class SimpleKinectProcessingExample extends SimXApplication with JVRInit {
-  val gfxName = 'renderer
 
   override protected def applicationConfiguration = ApplicationConfig withComponent
-    JVRComponentAspect(gfxName, BasicDisplayConfiguration(640, 480, fullscreen = false)) and
     EditorComponentAspect('editor, appName = "MasterControlProgram") and
     VRPNComponentAspect('vrpn)
 
-  protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {
-    exitOnClose(components(gfxName), shutdown) // register for exit on close
-    start(ExecutionStrategy where components(gfxName) runs Soft(60))
-  }
+  protected def configureComponents(components: immutable.Map[Symbol, SVarActor.Ref]): Unit = {}
 
   protected def createEntities(): Unit = {
-    KinectFAASTSkeleton_1_2.userDescription("Tracker0@" + Servers.fishTank).realize()
+    KinectFAASTSkeleton_1_2.userDescription("Tracker0@" + Servers.workstation, None).realize()
   }
 
   //Some definitions
-  val RightHand  = types.EntityType(Symbols.hand) and types.Chirality(chirality.Right)
-  val Spine      = types.EntityType(Symbols.spine)
+  val RightHand      = types.EntityType(Symbols.hand)     and types.Chirality(chirality.Right)
+  val RightElbow     = types.EntityType(Symbols.elbow)    and types.Chirality(chirality.Right)
+  val RightShoulder  = types.EntityType(Symbols.shoulder) and types.Chirality(chirality.Right)
+  val Spine          = types.EntityType(Symbols.spine)
+  val User           = types.EntityType(Symbols.user)
 
   val RightHandRelative =
     types.EntityType.withAnnotations(types.RelativeTo(Symbols.spine))(Symbols.hand) and types.Chirality(chirality.Right)
@@ -84,6 +83,28 @@ class SimpleKinectProcessingExample extends SimXApplication with JVRInit {
         (types.Position of RightHand) relativeTo (types.Transformation of Spine)
       }
     }
+
+    Start a new Processor { //that
+      Requires property types.Transformation from RightHand
+      Requires property types.Transformation from RightShoulder
+      Requires property types.Transformation from RightElbow
+
+      Updates the properties of User `with` {
+        val shoulderT = (types.Transformation of RightShoulder).value
+        val handT     = (types.Transformation of RightHand).value
+        val elbowT    = (types.Transformation of RightElbow).value
+
+        val shoulderP = shoulderT(3).xyz
+        val handP     = handT(3).xyz
+        val elbowP    = elbowT(3).xyz
+
+        val angle  = types.Angle between (types.Vector3(handP - elbowP), types.Vector3(shoulderP - elbowP))
+        val angleD = simplex3d.math.float.functions.degrees(angle.value)
+
+        types.Angle(angleD)
+      }
+    }
+
   }
 
   protected def removeFromLocalRep(e : Entity){}

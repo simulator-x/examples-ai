@@ -20,6 +20,7 @@
 
 package simx.applications.examples.ai.mipro
 
+import simplex3d.math.Vec2i
 import simplex3d.math.float._
 import simx.applications.examples.ai.objects._
 import simx.components.editor.EditorComponentAspect
@@ -109,6 +110,10 @@ class EntityRequestExample(args : Array[String]) extends SimXApplication with JV
     requestRegisteredEntities(SValEquals(entityTypeProperty) and SValEquals(chiralityProperty)) { entities =>
       println("Got " + entities.size + " entities that qualify as 'rightHandRelativeToRightElbow': " + entities.map(_.getSimpleName).mkString(", "))
     }
+
+    onEntityAppearance(NameContains("ball")) { e =>
+      println("A wild " + e.getSimpleName + " entity appeared.")
+    }
   }
 
   private def entityComplete(e: Entity) {println("[info][EntityRegistryTest] Completed entity " + e)}
@@ -150,6 +155,9 @@ class EntityRequestExample(args : Array[String]) extends SimXApplication with JV
         newBallEntity.observe(types.Transformation).head {
           newTransform => if(extractHeight(newTransform) < -2f) newBallEntity.remove()
         }
+        newBallEntity.set(types.Button_Right(true))
+        newBallEntity.set(types.Boolean(true))
+        newBallEntity.set(types.Resolution(Vec2i.One))
     }
   }
 

@@ -20,12 +20,13 @@
 
 package simx.applications.examples.ai.objects
 
+import simx.components.sound.SoundMaterial
 import simx.core.components.renderer.createparameter.{ReadFromElseWhere, ShapeFromFile}
 import simx.core.components.physics.ImplicitEitherConversion._
 import simx.core.components.physics.PhysSphere
-import simx.core.ontology.EntityDescription
+import simx.core.entity.description.SValSet
+import simx.core.ontology.{Symbols, EntityDescription, types}
 import simplex3d.math.float.{ConstVec3, Mat4x3, ConstMat4}
-import simx.core.worldinterface.naming.NameIt
 
 /**
  * An entity description for a jumping ball.
@@ -37,19 +38,19 @@ import simx.core.worldinterface.naming.NameIt
  * @param radius The radius of the ball. Must be larger than 0.
  * @param position The inital position of the ball.
  */
-case class Ball(name : String, radius : Float, position : ConstVec3) extends EntityDescription (name,
-  PhysSphere(
-    restitution    = 0.998f,
-    transform      = position,
-    radius         = radius
-  ),
-  ShapeFromFile(
-    file           = "assets/vis/ball.dae",
-    scale          = ConstMat4(Mat4x3.scale(radius*2f)),
-    transformation = ReadFromElseWhere
-  ),
-  NameIt(name)
-) {
+case class Ball(name : String, radius : Float, position : ConstVec3) extends
+  EntityDescription (
+    aspects =
+      PhysSphere(restitution = 0.998f, transform = position, radius = radius) ::
+      ShapeFromFile(
+        file = "assets/vis/ball.dae",
+        scale = ConstMat4(Mat4x3.scale(radius*2f)),
+        transformation = ReadFromElseWhere) ::
+      SoundMaterial("ball") :: Nil,
+    name = Symbol(name),
+    additionalProperties = SValSet(types.EntityType(Symbols.iceball))
+  )
+{
   require( name != null, "The parameter 'name' must not be null!")
   require( radius > 0.0, "The parameter 'radius' must be larger than 0.0!")
   require( position != null, "The parameter 'position' must be larger than null!")

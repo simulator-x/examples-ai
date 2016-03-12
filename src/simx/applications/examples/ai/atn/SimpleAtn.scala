@@ -37,8 +37,18 @@ class SimpleAtn extends AugmentedTransitionNetwork {
   override val outputTypes: List[EventDescription] = Commands.createSphere :: Nil
   override val inputTypes: List[EventDescription] = SpeechEvents.token :: Nil
 
+  val copyAndPrint =
+    Seq[ArcFunction.FunctionType](
+      copyEventDataToRegister(types.String),
+      copyPreviousRegisterValues(types.String),
+      printInfo
+    )
+
+
   //Topology
-  create StartState 'start        withArc 'create toTargetState 'awaitingDet
+  create StartState 'start        withArc 'create toTargetState 's1
+  create State      's1           withEpsilonArc 'isTrue toTargetState 's2
+  create State      's2           withEpsilonArc 'isTrue toTargetState 'awaitingDet
   create State      'awaitingDet  withArc 'a      toTargetState 'awaitingNoun
   create State      'awaitingNoun withArc 'sphere toTargetState 'end
   create State      'end
@@ -46,6 +56,7 @@ class SimpleAtn extends AugmentedTransitionNetwork {
   create Arc 'create withCondition  checkToken("create") addFunction addAndCopyRegister
   create Arc 'a withCondition       checkToken("a") addFunction addAndCopyRegister
   create Arc 'sphere withCondition  checkToken("sphere") addFunction (addAndCopyRegister, complete)
+  create EpsilonArc 'true withCondition isTrue addFunctions copyAndPrint
 
   def checkToken(validTokens: String*)(in: Event): Condition.Result = {
     in.name match {
@@ -65,6 +76,14 @@ class SimpleAtn extends AugmentedTransitionNetwork {
     copyRegister(in, triggeredArc, curReg, prevReg, atn)
     copyEventDataToRegister(types.String)(in, triggeredArc, curReg, prevReg, atn)
     println("Current Register at " + curReg.id + " containing " + curReg.register)
+    Nil
+  }
+
+  def isTrue(in: Event, curReg: StateRep, prevReg: StateRep): Condition.Result = {
+    ConditionResult(doTransition = true)
+  }
+
+  def doTrue() ={
     Nil
   }
 

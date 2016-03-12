@@ -20,38 +20,52 @@
 
 package simx.applications.examples.ai.atn
 
-import simplex3d.math.floatx.{ConstVec3f, Vec3f}
+import simplex3d.math.floatx.{Vec3f, Mat4x3f, ConstMat4f}
 import simx.components.ai.atn.core.ATNMachineAspect
 import simx.components.editor.EditorComponentAspect
 import simx.components.renderer.jvr.JVRComponentAspect
+import simx.components.vrpn.VRPNComponentAspect
+import simx.components.vrpn.devices.VRPNToken
 import simx.core.component.{Soft, ExecutionStrategy}
 import simx.core.components.io.SpeechEvents
+import simx.core.components.renderer.createparameter.{PointLight, ShapeFromFile}
 import simx.core.components.renderer.setup.BasicDisplayConfiguration
 import simx.core.entity.Entity
-import simx.core.ontology.{Symbols, types}
+import simx.core.entity.description.SValSet
+import simx.core.helper.{Hypothesized, Recognized}
+import simx.core.ontology.{EntityDescription, Symbols, types}
+import simx.core.svaractor.SVarActor
 import simx.core.svaractor.SVarActor.Ref
+import simx.core.worldinterface.entity.filter.SValEquals
 import simx.core.{ApplicationConfig, SimXApplicationMain, SimXApplication}
 import simx.core.worldinterface.eventhandling.{EventDescription, EventHandler, EventProvider}
+import simx.core.components.renderer.createparameter.convert._
+
+import scala.util.Random
 
 
-object SplitMergeAtnExample extends SimXApplicationMain (new SplitMergeAtnExample) {
-  val editorName  = 'editor
-  val atnName     = 'splitMergeAtn
-  val gfxName     = 'renderer
+object MMIExample extends SimXApplicationMain (new MMIExample) {
+  val editorName = 'editor
+  val atnName = 'simpleAtn
+  val gfxName = 'renderer
+  val vrpnName = 'vrpnName
 }
 
-object ExampleEvents {
-  val pointingGestureDetected = new EventDescription(Symbols.pointing)
-  val command = new EventDescription(Symbols.action)
+object MMICommands {
+  val createSphere = new EventDescription(Symbols.sphere)
 }
 
-class SplitMergeAtnExample extends SimXApplication with EventHandler with EventProvider {
-  import SplitMergeAtnExample._
+
+class MMIExample extends SimXApplication with EventHandler with EventProvider {
+
+  import MMIExample._
 
   protected def applicationConfiguration = ApplicationConfig withComponent
     JVRComponentAspect(gfxName, BasicDisplayConfiguration(640, 480, fullscreen = false)) and
     EditorComponentAspect(editorName) and
-    ATNMachineAspect(atnName, new SplitMergeAtn, autoResetAfter = Some(1000000L), drawGraphs = true)
+    VRPNComponentAspect(vrpnName) and
+    ATNMachineAspect(atnName, new MMIAtn, autoResetAfter = Some(1000L), drawGraphs = true)
+
 
   protected def configureComponents(components: Map[Symbol, Ref]) = {
     start(ExecutionStrategy where
@@ -61,45 +75,57 @@ class SplitMergeAtnExample extends SimXApplication with EventHandler with EventP
 
   protected def createEntities() {}
 
+
+
   protected def finishConfiguration() {
     initKeyboard()
-    ExampleEvents.command.observe{event =>
-      val pointingDirection = event.values.firstValueFor(types.Direction)
-      val entity = getEntityFrom(pointingDirection)
-      val command = event.values.getAllValuesFor(types.String)
-      execute(command, entity)
+    initLight()
+
+    VRPNToken("localhost").desc.realize(println)
+
+
+    MMICommands.createSphere.observe{ event =>
+      new EntityDescription("a ball",
+        ShapeFromFile(
+          file = "assets/vis/ball.dae",
+          transformation = ConstMat4f(Mat4x3f.translate(Vec3f(rnd, rnd, -10f)))
+        )
+      ).realize()
     }
+  }
+
+  private def rnd = getNextRnd()
+
+  private def getNextRnd(min: Float = -1f, max: Float = 1f): Float = {
+    assert(min < max)
+    val delta = max - min
+    min + Random.nextFloat() * delta
   }
 
   private def initKeyboard(): Unit = {
-    handleDevice(types.Keyboard){ keyboardEntity =>
-      keyboardEntity.observe(types.Key_1){pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("remove"), types.Time(1L))
+    onOneEntityAppearance(SValEquals(types.EntityType(Symbols.keyboard))) { keyboardEntity =>
+      keyboardEntity.observe(types.Key_1){ pressed =>
+        if(pressed) SpeechEvents.token.emit(types.String("create"), types.Time(1L))
       }
       keyboardEntity.observe(types.Key_2){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("this"), types.Time(2L))
+        if(pressed) SpeechEvents.token.emit(types.String("a"), types.Time(2L))
       }
       keyboardEntity.observe(types.Key_3){ pressed =>
-        if(pressed) ExampleEvents.pointingGestureDetected.emit(types.Direction(Vec3f.UnitZ), types.Time(4L))
+        if(pressed) SpeechEvents.token.emit(types.String("dog"), types.Time(3L))
       }
       keyboardEntity.observe(types.Key_4){ pressed =>
-        if(pressed) SpeechEvents.token.emit(types.String("ball"), types.Time(5L))
+        if(pressed) SpeechEvents.token.emit(types.String("ball"), types.Time(4L))
       }
     }
   }
 
-  private def getEntityFrom(pointingDirection: ConstVec3f): Entity = {
-    //Just an example
-    //Here entities the entity closest to the pointing direction could be retrieved.
-    //You probably require more information than just the direction, e.g. the origin
-    new Entity()
-  }
-
-  private def execute(command: List[String], e: Entity): Unit = {
-    //Just an example
-    //Execute the command.
-    //Feel free to adapt this very simple example.
-    println("[SplitMergeAtnExample] executing command " + command)
+  private def initLight(): Unit = {
+    new EntityDescription("the light",
+      PointLight(
+        name = "the light",
+        transformation = ConstMat4f(Mat4x3f.Identity)
+      )
+    ).realize()
   }
 
   protected def removeFromLocalRep(e: Entity) {}
